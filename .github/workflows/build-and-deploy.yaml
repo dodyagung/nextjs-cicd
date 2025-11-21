@@ -45,9 +45,9 @@ jobs:
           overrule_existing_kubeconfig: true
           exec: |
             helm upgrade $(echo "${{ github.event.repository.name }}" | tr -d '.') helm-charts \
+              --atomic \
               --history-max 3 \
               --install \
-              --rollback-on-failure \
               --set image.tag="latest" \
               --set "env[0].name=APP_KEY" --set "env[0].value=${{ secrets.APP_KEY }}" \
-              --wait=watcher
+              --wait
