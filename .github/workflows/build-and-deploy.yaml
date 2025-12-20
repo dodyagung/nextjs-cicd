@@ -1,5 +1,8 @@
 name: Build and Deploy
-
+permissions:
+  contents: read
+  packages: write
+  
 on: push
 
 jobs:
@@ -46,8 +49,8 @@ jobs:
           exec: |
             helm upgrade $(echo "${{ github.event.repository.name }}" | tr -d '.') helm-charts \
               --atomic \
-              --history-max 3 \
+              --debug \
+              --history-max 2 \
               --install \
               --set image.tag="latest" \
-              --set "env[0].name=APP_KEY" --set "env[0].value=${{ secrets.APP_KEY }}" \
               --wait
