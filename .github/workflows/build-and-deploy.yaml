@@ -2,7 +2,7 @@ name: Build and Deploy
 permissions:
   contents: read
   packages: write
-  
+
 on: push
 
 jobs:
@@ -52,5 +52,10 @@ jobs:
               --debug \
               --history-max 2 \
               --install \
-              --set image.tag="latest" \
+              --set-string image.tag="latest" \
+              --set-string podAnnotations.deployedAt="$(TZ='Asia/Jakarta' date +'%Y-%m-%dT%H:%M:%S%z')" \
+              --set-string podAnnotations.deployedBy="${{ github.actor }}" \
+              --set-string podAnnotations.projectBranch="${{ github.ref_name }}" \
+              --set-string podAnnotations.projectCommit="$(echo $GITHUB_SHA | cut -c1-7)" \
+              --set-string podAnnotations.projectPath="${{ github.repository }}" \
               --wait
